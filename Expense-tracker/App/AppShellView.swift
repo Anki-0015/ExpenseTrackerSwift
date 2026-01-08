@@ -7,13 +7,12 @@ struct AppShellView: View {
 
     var body: some View {
         Group {
-            switch appState.route {
-            case .auth:
-                AuthView()
-            case .main:
+            if appState.isSignedIn, appState.route == .main {
                 AppLockGateView {
                     RootView()
                 }
+            } else {
+                AuthView()
             }
         }
         .task {

@@ -89,7 +89,8 @@ struct AuthView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Back") {
-                        appState.route = .main
+                        // Auth-gated app: don't navigate to main when signed out.
+                        appState.route = .auth
                     }
                 }
             }

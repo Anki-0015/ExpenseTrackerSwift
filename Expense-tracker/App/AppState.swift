@@ -29,9 +29,14 @@ final class AppState {
         }
     }
 
-    // Offline-first: the app is usable without auth; auth is an optional route.
-    var route: AppRoute = .main
+    // Auth-gated: user must be signed in to access app data.
+    var route: AppRoute = .auth
     private(set) var authStatus: AuthStatus = .unknown
+
+    var isSignedIn: Bool {
+        if case .signedIn = authStatus { return true }
+        return false
+    }
 
     // Session/JWT snapshot (in-memory)
     private(set) var accessTokenJWT: String?
@@ -69,11 +74,13 @@ final class AppState {
         // Best-effort initial snapshot (the auth event stream will also update this).
         if let sessionInfo = await auth.currentSessionInfo() {
             updateFromSessionInfo(sessionInfo)
+            route = .main
         } else {
             authStatus = .signedOut
             accessTokenJWT = nil
             refreshToken = nil
             tokenExpiresAt = nil
+            route = .auth
         }
     }
 
@@ -103,8 +110,10 @@ final class AppState {
         case .initialSession:
             if let session {
                 authStatus = .signedIn(userId: session.user.id, email: session.user.email)
+                route = .main
             } else {
                 authStatus = .signedOut
+                route = .auth
             }
 
         case .signedIn:
