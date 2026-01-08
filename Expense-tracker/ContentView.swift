@@ -6,19 +6,17 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        RootView()
     }
 }
 
 #Preview {
-    ContentView()
+    let container = PersistenceController.makeModelContainer(inMemory: true)
+    return ContentView()
+        .environment(AppState())
+        .modelContainer(container)
 }
