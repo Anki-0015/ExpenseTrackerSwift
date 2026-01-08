@@ -125,7 +125,7 @@ final class AppState {
             refreshToken = nil
             tokenExpiresAt = nil
             authSheet = nil
-            route = .main
+            route = .auth
 
         case .passwordRecovery:
             // Show UI to update the password.
@@ -153,6 +153,6 @@ final class AppState {
     @MainActor
     func setSignedOut() {
         authStatus = .signedOut
-        route = .main
+        route = .auth
     }
 }

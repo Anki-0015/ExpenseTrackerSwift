@@ -3,13 +3,84 @@ import LocalAuthentication
 import SwiftData
 
 struct SettingsView: View {
+    @Environment(AppState.self) private var appState
+
+    @State private var isSigningOut: Bool = false
+    @State private var confirmSignOut: Bool = false
+
     var body: some View {
         NavigationStack {
             List {
                 SettingsSectionsView()
+
+                accountSection
             }
+            .listStyle(.insetGrouped)
             .navigationTitle("Settings")
         }
+    }
+
+    @ViewBuilder
+    private var accountSection: some View {
+        Section("Account") {
+            switch appState.authStatus {
+            case .signedIn(_, let email):
+                HStack {
+                    Text("Signed in")
+                    Spacer()
+                    Text(email ?? "—")
+                        .foregroundStyle(.secondary)
+                }
+
+                Button(role: .destructive) {
+                    confirmSignOut = true
+                } label: {
+                    if isSigningOut {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        Text("Sign out")
+                    }
+                }
+                .disabled(isSigningOut)
+
+            case .signedOut, .unknown:
+                HStack {
+                    Text("Signed out")
+                    Spacer()
+                    Text("Local mode")
+                        .foregroundStyle(.secondary)
+                }
+
+                Button("Sign in") {
+                    appState.route = .auth
+                }
+            }
+        }
+        .confirmationDialog(
+            "Sign out?",
+            isPresented: $confirmSignOut,
+            titleVisibility: .visible
+        ) {
+            Button("Sign out", role: .destructive) {
+                Task { await signOut() }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("You’ll be taken to the sign in screen. Your local expenses stay on this device.")
+        }
+    }
+
+    private func signOut() async {
+        isSigningOut = true
+        defer { isSigningOut = false }
+
+        let auth = AuthService()
+        await auth.signOut()
+        appState.setSignedOut()
     }
 }
 

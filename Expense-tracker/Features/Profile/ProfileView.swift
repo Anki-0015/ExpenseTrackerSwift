@@ -22,14 +22,6 @@ struct ProfileView: View {
                     }
                     .accessibilityLabel("Settings")
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    if case .signedIn = model.state {
-                        Button("Sign out") {
-                            Task { await model.signOut() }
-                            appState.setSignedOut()
-                        }
-                    }
-                }
             }
             .task {
                 await model.loadCurrentUser()
