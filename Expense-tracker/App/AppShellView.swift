@@ -1,4 +1,6 @@
 import SwiftUI
+import Supabase
+import Auth
 
 struct AppShellView: View {
     @Environment(AppState.self) private var appState
@@ -6,8 +8,6 @@ struct AppShellView: View {
     var body: some View {
         Group {
             switch appState.route {
-            case .landing:
-                LandingView()
             case .auth:
                 AuthView()
             case .main:
@@ -18,6 +18,9 @@ struct AppShellView: View {
         }
         .task {
             await appState.bootstrapSessionIfNeeded()
+        }
+        .onOpenURL { url in
+            SupabaseClientProvider.shared.client.auth.handle(url)
         }
     }
 }

@@ -48,6 +48,13 @@ final class AuthViewModel {
             let profile = UserProfile(id: user.id, email: user.email, fullName: fullName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : fullName)
             try await profiles.upsertProfile(profile)
 
+            // If confirm-email is enabled in Supabase, signUp() may not return a session.
+            // Only treat as signed-in if a session exists.
+            if mode == .signUp, await auth.currentUser() == nil {
+                message = "Account created. Please confirm your email, then sign in."
+                return nil
+            }
+
             return user
         } catch {
             message = error.localizedDescription

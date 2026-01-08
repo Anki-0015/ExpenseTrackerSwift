@@ -14,6 +14,18 @@ enum SupabaseConfig {
 
     private static let anonKeyString: String = "sb_publishable_L8DkhUxfZ5aLRf4rE5O8GA_4FwVgH0Z"
 
+    // Used for auth redirects (password recovery, magic links, etc).
+    // Must match a URL scheme registered in Info.plist and a Redirect URL in Supabase Auth settings.
+    static let redirectScheme: String = "expense-tracker"
+
+    static var redirectURL: URL {
+        // Example: expense-tracker://auth-callback
+        guard let url = URL(string: "\(redirectScheme)://auth-callback") else {
+            fatalError("Invalid Supabase redirect URL scheme: \(redirectScheme)")
+        }
+        return url
+    }
+
     static var url: URL {
         guard !urlString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               let url = URL(string: urlString) else {

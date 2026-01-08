@@ -17,6 +17,12 @@ struct ProfileView: View {
             .navigationTitle("Profile")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape")
+                    }
+                    .accessibilityLabel("Settings")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
                     if case .signedIn = model.state {
                         Button("Sign out") {
                             Task { await model.signOut() }
@@ -73,10 +79,6 @@ struct ProfileView: View {
                     }
                 }
                 .disabled(model.isLoading)
-            }
-
-            Section("Settings") {
-                SettingsSectionsView()
             }
 
             if let message = model.message {

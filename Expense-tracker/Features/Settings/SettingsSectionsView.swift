@@ -13,6 +13,22 @@ struct SettingsSectionsView: View {
             NavigationLink("Goals", destination: GoalsView())
         }
 
+        Section("Appearance") {
+            Picker(
+                "Theme",
+                selection: Binding(
+                    get: { appState.settings.appearance },
+                    set: { newValue in
+                        appState.updateSettings { $0.appearance = newValue }
+                    }
+                )
+            ) {
+                Text("System").tag(AppAppearance.system)
+                Text("Light").tag(AppAppearance.light)
+                Text("Dark").tag(AppAppearance.dark)
+            }
+        }
+
         Section("Preferences") {
             TextField("Currency code", text: Binding(
                 get: { appState.settings.defaultCurrencyCode },

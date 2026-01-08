@@ -20,6 +20,8 @@ struct Expense_trackerApp: App {
             AppShellView()
             .environment(appState)
             .modelContainer(modelContainer)
+            .preferredColorScheme(colorScheme(for: appState.settings.appearance))
+            .tint(.accentColor)
             .task {
                 let context = modelContainer.mainContext
 
@@ -41,6 +43,17 @@ struct Expense_trackerApp: App {
                     }
                 }
             }
+        }
+    }
+
+    private func colorScheme(for appearance: AppAppearance) -> ColorScheme? {
+        switch appearance {
+        case .system:
+            return nil
+        case .light:
+            return .light
+        case .dark:
+            return .dark
         }
     }
 
