@@ -1,6 +1,53 @@
 # Expense Tracker (SwiftUI + SwiftData + Supabase)
 
-A local-first expense tracker built with SwiftUI and SwiftData, with optional Supabase auth/profile.
+A local-first expense tracker built with SwiftUI + SwiftData, with Supabase email/password auth, profile support, and a Supabase sync service.
+
+## Features
+
+### Expense & income tracking
+
+- Local-first persistence using SwiftData
+- Add transactions as **Expense** or **Income**
+- Fields: amount, currency, date/time, title, category, payment method, notes, and mood/emotional tag
+- Approval workflow for expenses: **pending → approved** (or **discarded**) with a dedicated **Review** screen
+
+### Dashboard & analytics
+
+- Monthly **Financial Health Score** (0–100) with explainable scoring factors
+- Key stats: total spent, average per day, transactions count, and daily logging ratio/streak
+- Category breakdown chart (pie)
+- 30-day spending trend chart (line)
+- Rule-based, explainable insights (e.g., mood correlation, category breadth, volatility change)
+- “Quick Add” templates for common expenses
+
+### Budgets, goals, and timeline
+
+- Monthly budgets with per-category planned amounts
+- Optional **zero-based budgeting** (assigned income + unassigned calculation)
+- Per-category carry-forward rules: next month / savings / none
+- Automatic carry-forward processing on app launch and when the app becomes active
+- Savings goals with progress tracking and optional deadlines
+- Quick allocate savings to a goal via swipe actions (records goal allocation events)
+- Timeline combining transactions, budgets, budget changes, and goal allocation events
+
+### Settings, safety, and data tools
+
+- Appearance: System / Light / Dark theme
+- Preferences: default currency code and fiscal month start day
+- Review reminder: optional daily local notification + configurable time
+- Security: optional app lock (Face ID / Touch ID / device passcode)
+- Export: generate and share a JSON export of expenses
+- Data integrity checks (monthly): duplicate detection + outlier detection
+- Reset tools: delete local expenses for the current month or current year
+
+### Supabase (cloud)
+
+- Email/password authentication
+- Password reset flow (deep link back into the app)
+- Profiles table support (stores full name and basic profile data)
+- Sync service:
+  - Download expenses from Supabase into local SwiftData
+  - Upload local expenses, budgets, goals, and templates to Supabase
 
 ## Project Structure
 
